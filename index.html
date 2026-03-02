@@ -8,19 +8,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f4f6fb;
-    --surface: #ffffff;
-    --surface2: #f0f2f8;
-    --border: #dde1ee;
-    --accent: #4f46e5;
-    --accent2: #6366f1;
-    --selected: #4f46e5;
-    --selected-bg: rgba(79, 70, 229, 0.12);
-    --text: #1e1e2e;
-    --muted: #6b7280;
-    --success: #059669;
-    --danger: #dc2626;
-    --slot-h: 30px;
+    --bg: #f4f6fb; --surface: #ffffff; --surface2: #f0f2f8; --border: #dde1ee;
+    --accent: #4f46e5; --accent2: #6366f1; --selected: #4f46e5;
+    --selected-bg: rgba(79, 70, 229, 0.12); --text: #1e1e2e; --muted: #6b7280;
+    --success: #059669; --danger: #dc2626; --slot-h: 30px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
@@ -62,9 +53,9 @@
   .selected-summary .count span { color: var(--accent); font-weight: 600; }
   .selected-slots-list { display: flex; flex-wrap: wrap; gap: 6px; max-height: 120px; overflow-y: auto; }
   .slot-tag { font-size: 11px; padding: 4px 10px; background: var(--selected-bg); border: 1px solid var(--selected); border-radius: 20px; color: var(--accent); font-family: 'DM Mono', monospace; }
-  .allday-tag { background: rgba(5, 150, 105, 0.1); border-color: var(--success); color: var(--success); font-family: 'Noto Sans JP', sans-serif; font-weight: 600; }
+  .allday-tag { background: rgba(5,150,105,0.1); border-color: var(--success); color: var(--success); font-family: 'Noto Sans JP', sans-serif; font-weight: 600; }
   .submit-area { margin-top: 28px; display: flex; flex-direction: column; gap: 12px; align-items: center; }
-  .btn-submit { width: 100%; max-width: 400px; padding: 16px; background: linear-gradient(135deg, #4f46e5, #6366f1); color: #fff; border: none; border-radius: 14px; font-family: inherit; font-size: 16px; font-weight: 700; cursor: pointer; transition: opacity 0.2s, transform 0.1s; box-shadow: 0 4px 24px rgba(79, 70, 229, 0.25); }
+  .btn-submit { width: 100%; max-width: 400px; padding: 16px; background: linear-gradient(135deg, #4f46e5, #6366f1); color: #fff; border: none; border-radius: 14px; font-family: inherit; font-size: 16px; font-weight: 700; cursor: pointer; transition: opacity 0.2s, transform 0.1s; box-shadow: 0 4px 24px rgba(79,70,229,0.25); }
   .btn-submit:hover { opacity: 0.9; }
   .btn-submit:active { transform: scale(0.98); }
   .btn-submit:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
@@ -136,199 +127,171 @@ const TODAY = new Date(); TODAY.setHours(0,0,0,0);
 const DOW_LABELS = ['日','月','火','水','木','金','土'];
 function getWeekDates(offset) {
   const d = new Date(TODAY); const day = d.getDay();
-  d.setDate(d.getDate() + (day === 0 ? -6 : 1 - day) + offset * 7);
-  return Array.from({length:7}, (_,i) => { const dd = new Date(d); dd.setDate(d.getDate()+i); return dd; });
+  d.setDate(d.getDate() + (day===0?-6:1-day) + offset*7);
+  return Array.from({length:7},(_,i)=>{ const dd=new Date(d); dd.setDate(d.getDate()+i); return dd; });
 }
-function slotKey(date, hour, half) {
+function slotKey(date,hour,half) {
   return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}_${String(hour).padStart(2,'0')}:${half?'30':'00'}`;
 }
-function isSlotAvailable(date) {
-  const now = new Date();
-  if (CONFIG.dlDaysEnabled) {
-    const cutoff = new Date(date); cutoff.setHours(0,0,0,0);
-    cutoff.setDate(cutoff.getDate() - CONFIG.dlDays); cutoff.setHours(23,59,59,999);
-    if (now > cutoff) return false;
-  }
-  if (CONFIG.dlMonthlyEnabled) {
-    const cutoff = new Date(now.getFullYear(), now.getMonth(), CONFIG.deadlineDay, 23,59,59);
-    if (now > cutoff) return false;
-  }
+function isSlotAvailable(date,hour,half) {
+  const now=new Date();
+  if (CONFIG.dlDaysEnabled) { const c=new Date(date); c.setHours(0,0,0,0); c.setDate(c.getDate()-CONFIG.dlDays); c.setHours(23,59,59,999); if(now>c)return false; }
+  if (CONFIG.dlMonthlyEnabled) { const c=new Date(now.getFullYear(),now.getMonth(),CONFIG.deadlineDay,23,59,59); if(now>c)return false; }
   return true;
 }
-function isPastDate(date) { return date < TODAY; }
-(function initWeek() {
-  const maxDate = new Date(TODAY); maxDate.setMonth(maxDate.getMonth()+1);
-  outerLoop: for (let w=0; w<=4; w++) {
-    for (const wd of getWeekDates(w)) {
-      if (wd < TODAY || wd >= maxDate) continue;
-      if (isSlotAvailable(wd)) { currentWeekOffset = w; break outerLoop; }
-    }
-  }
+function isPastDate(date){return date<TODAY;}
+(function initWeek(){
+  const maxDate=new Date(TODAY); maxDate.setMonth(maxDate.getMonth()+1);
+  outerLoop: for(let w=0;w<=4;w++){for(const wd of getWeekDates(w)){if(wd<TODAY||wd>=maxDate)continue;if(isSlotAvailable(wd,CONFIG.startHour,false)){currentWeekOffset=w;break outerLoop;}}}
 })();
-function toggleAllDay(cb) {
-  const dateKey = cb.dataset.datekey; const checked = cb.checked;
-  const [y,m,d] = dateKey.split('-').map(Number); const date = new Date(y,m-1,d);
-  for (let h=CONFIG.startHour; h<CONFIG.endHour; h++) {
-    for (const half of [false,true]) {
-      const key = slotKey(date,h,half); const el = document.querySelector(`[data-key="${key}"]`);
-      if (!el || el.style.cursor==='not-allowed') continue;
-      if (checked) { selectedSlots.add(key); el.classList.add('selected'); }
-      else { selectedSlots.delete(key); el.classList.remove('selected'); }
-    }
-  }
+function toggleAllDay(cb){
+  const dateKey=cb.dataset.datekey,checked=cb.checked,[y,m,d]=dateKey.split('-').map(Number),date=new Date(y,m-1,d);
+  for(let h=CONFIG.startHour;h<CONFIG.endHour;h++){for(const half of[false,true]){const key=slotKey(date,h,half),el=document.querySelector(`[data-key="${key}"]`);if(!el||el.style.cursor==='not-allowed')continue;if(checked){selectedSlots.add(key);el.classList.add('selected');}else{selectedSlots.delete(key);el.classList.remove('selected');}}}
   updateSummary();
 }
-function renderCalendar() {
-  const dates = getWeekDates(currentWeekOffset);
-  const maxDate = new Date(TODAY); maxDate.setMonth(maxDate.getMonth()+1);
-  document.getElementById('week-label').textContent = `${dates[0].getMonth()+1}/${dates[0].getDate()} 〜 ${dates[6].getMonth()+1}/${dates[6].getDate()}`;
-  document.getElementById('prev-week').disabled = currentWeekOffset <= 0;
-  document.getElementById('next-week').disabled = dates[0] >= maxDate;
-  const container = document.getElementById('cal-container'); container.innerHTML = '';
-  const hours = []; for (let h=CONFIG.startHour; h<CONFIG.endHour; h++) { hours.push({h,half:false}); hours.push({h,half:true}); }
-  const gridStyle = 'grid-template-columns: 50px repeat(7, 1fr);';
-  const header = document.createElement('div'); header.className = 'cal-header'; header.style.cssText = `display:grid; ${gridStyle}`;
-  header.innerHTML = '<div class="time-col"></div>';
-  dates.forEach(d => {
-    const dow = d.getDay(); const isToday = d.getTime()===TODAY.getTime();
-    const cls = `day-header ${isToday?'today':''} ${dow===6?'sat':''} ${dow===0?'sun':''}`;
-    const dateKey = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-    const past = isPastDate(d);
-    header.innerHTML += `<div class="${cls}"><div class="dow">${DOW_LABELS[dow]}</div><div class="date">${d.getDate()}</div><div class="allday-wrap"><label class="allday-label"><input type="checkbox" class="allday-cb" data-datekey="${dateKey}" ${past?'disabled':''} onchange="toggleAllDay(this)"><span>終日可</span></label></div></div>`;
+function renderCalendar(){
+  const dates=getWeekDates(currentWeekOffset),maxDate=new Date(TODAY);maxDate.setMonth(maxDate.getMonth()+1);
+  document.getElementById('week-label').textContent=`${dates[0].getMonth()+1}/${dates[0].getDate()} 〜 ${dates[6].getMonth()+1}/${dates[6].getDate()}`;
+  document.getElementById('prev-week').disabled=currentWeekOffset<=0;
+  document.getElementById('next-week').disabled=dates[0]>=maxDate;
+  const container=document.getElementById('cal-container');container.innerHTML='';
+  const hours=[];for(let h=CONFIG.startHour;h<CONFIG.endHour;h++){hours.push({h,half:false});hours.push({h,half:true});}
+  const gs='grid-template-columns: 50px repeat(7, 1fr);';
+  const header=document.createElement('div');header.className='cal-header';header.style.cssText=`display:grid; ${gs}`;header.innerHTML='<div class="time-col"></div>';
+  dates.forEach(d=>{
+    const dow=d.getDay(),isToday=d.getTime()===TODAY.getTime();
+    const cls=`day-header ${isToday?'today':''} ${dow===6?'sat':''} ${dow===0?'sun':''}`;
+    const dk=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    header.innerHTML+=`<div class="${cls}"><div class="dow">${DOW_LABELS[dow]}</div><div class="date">${d.getDate()}</div><div class="allday-wrap"><label class="allday-label"><input type="checkbox" class="allday-cb" data-datekey="${dk}" ${isPastDate(d)?'disabled':''} onchange="toggleAllDay(this)"><span>終日可</span></label></div></div>`;
   });
   container.appendChild(header);
-  const body = document.createElement('div'); body.className = 'cal-body';
-  hours.forEach(({h,half}) => {
-    const isEven = Math.floor((h-CONFIG.startHour))%2===0;
-    const row = document.createElement('div'); row.className = `time-row${isEven?' hour-bg':''}`; row.style.cssText = `display:grid; ${gridStyle}`;
-    row.innerHTML = `<div class="${!half?'time-label hour-label':'time-label'}">${!half?String(h).padStart(2,'0')+':00':''}</div>`;
-    dates.forEach(d => {
-      const key = slotKey(d,h,half); const past = isPastDate(d)||!isSlotAvailable(d);
-      const cell = document.createElement('div');
-      cell.className = `${!half?'slot hour-start':'slot'} ${selectedSlots.has(key)?'selected':''} ${past?'past':''}`;
-      cell.dataset.key = key;
-      if (past) { cell.style.cssText = 'opacity:0.2; cursor:not-allowed;'; }
-      else {
-        cell.addEventListener('mousedown', e => { e.preventDefault(); startDrag(key); });
-        cell.addEventListener('mouseenter', () => { if (isDragging) continueDrag(key); });
-        cell.addEventListener('mouseup', () => endDrag());
-        cell.addEventListener('touchstart', e => { e.preventDefault(); startDrag(key); }, {passive:false});
-        cell.addEventListener('touchmove', e => { e.preventDefault(); const t=e.touches[0]; const el=document.elementFromPoint(t.clientX,t.clientY); if (el&&el.dataset.key) continueDrag(el.dataset.key); }, {passive:false});
-        cell.addEventListener('touchend', () => endDrag());
+  const body=document.createElement('div');body.className='cal-body';
+  hours.forEach(({h,half})=>{
+    const isEven=Math.floor((h-CONFIG.startHour))%2===0;
+    const row=document.createElement('div');row.className=`time-row${isEven?' hour-bg':''}`;row.style.cssText=`display:grid; ${gs}`;
+    row.innerHTML=`<div class="${!half?'time-label hour-label':'time-label'}">${!half?String(h).padStart(2,'0')+':00':''}</div>`;
+    dates.forEach(d=>{
+      const key=slotKey(d,h,half),past=isPastDate(d)||!isSlotAvailable(d,h,half);
+      const cell=document.createElement('div');
+      cell.className=`${!half?'slot hour-start':'slot'} ${selectedSlots.has(key)?'selected':''} ${past?'past':''}`;
+      cell.dataset.key=key;
+      if(past){cell.style.cssText='opacity:0.2; cursor:not-allowed;';}
+      else{
+        cell.addEventListener('mousedown',e=>{e.preventDefault();startDrag(key);});
+        cell.addEventListener('mouseenter',()=>{if(isDragging)continueDrag(key);});
+        cell.addEventListener('mouseup',()=>endDrag());
+        cell.addEventListener('touchstart',e=>{e.preventDefault();startDrag(key);},{passive:false});
+        cell.addEventListener('touchmove',e=>{e.preventDefault();const t=e.touches[0];const el=document.elementFromPoint(t.clientX,t.clientY);if(el&&el.dataset.key)continueDrag(el.dataset.key);},{passive:false});
+        cell.addEventListener('touchend',()=>endDrag());
       }
       row.appendChild(cell);
     });
     body.appendChild(row);
   });
-  document.addEventListener('mouseup', endDrag);
-  container.appendChild(body); updateSummary();
+  document.addEventListener('mouseup',endDrag);
+  container.appendChild(body);updateSummary();
 }
-function changeWeek(dir) {
-  const maxDate = new Date(TODAY); maxDate.setMonth(maxDate.getMonth()+1);
-  const newOffset = currentWeekOffset+dir; const dates = getWeekDates(newOffset);
-  if (dir<0 && newOffset<0) return; if (dir>0 && dates[0]>=maxDate) return;
-  currentWeekOffset = newOffset; renderCalendar();
+function changeWeek(dir){
+  const maxDate=new Date(TODAY);maxDate.setMonth(maxDate.getMonth()+1);
+  const newOffset=currentWeekOffset+dir,dates=getWeekDates(newOffset);
+  if(dir<0&&newOffset<0)return;if(dir>0&&dates[0]>=maxDate)return;
+  currentWeekOffset=newOffset;renderCalendar();
 }
-function startDrag(key) {
-  isDragging = true; dragMode = selectedSlots.has(key)?'remove':'add'; dragStartKey = key;
-  const [datePart,timePart] = key.split('_'); const [h,m] = timePart.split(':').map(Number);
-  const pairKey = m===0 ? `${datePart}_${String(h).padStart(2,'0')}:30` : `${datePart}_${String(h+1).padStart(2,'0')}:00`;
-  toggleSlot(key, dragMode==='add'); toggleSlot(pairKey, dragMode==='add');
+function startDrag(key){
+  isDragging=true;dragMode=selectedSlots.has(key)?'remove':'add';dragStartKey=key;
+  const[datePart,timePart]=key.split('_'),[h,m]=timePart.split(':').map(Number);
+  const pairKey=m===0?`${datePart}_${String(h).padStart(2,'0')}:30`:`${datePart}_${String(h+1).padStart(2,'0')}:00`;
+  toggleSlot(key,dragMode==='add');toggleSlot(pairKey,dragMode==='add');
 }
-function continueDrag(key) { if (!isDragging) return; toggleSlot(key, dragMode==='add'); }
-function endDrag() { isDragging=false; dragStartKey=null; dragMode=null; }
-function toggleSlot(key, add) {
-  const el = document.querySelector(`[data-key="${key}"]`);
-  if (!el || el.style.cursor==='not-allowed') return;
-  if (add) { selectedSlots.add(key); el.classList.add('selected'); }
-  else {
-    selectedSlots.delete(key); el.classList.remove('selected');
-    const dateKey = key.split('_')[0]; const cb = document.querySelector(`.allday-cb[data-datekey="${dateKey}"]`);
-    if (cb) cb.checked = false;
-  }
-  if (add) {
-    const dateKey = key.split('_')[0]; const cb = document.querySelector(`.allday-cb[data-datekey="${dateKey}"]`);
-    if (cb && !cb.checked) {
-      const [y,m,d] = dateKey.split('-').map(Number); const date = new Date(y,m-1,d);
-      let allFilled = true;
-      for (let h=CONFIG.startHour; h<CONFIG.endHour; h++) {
-        for (const half of [false,true]) {
-          const k = slotKey(date,h,half); const slotEl = document.querySelector(`[data-key="${k}"]`);
-          if (slotEl && slotEl.style.cursor!=='not-allowed' && !selectedSlots.has(k)) { allFilled=false; break; }
-        }
-        if (!allFilled) break;
+function continueDrag(key){if(!isDragging)return;toggleSlot(key,dragMode==='add');}
+function endDrag(){isDragging=false;dragStartKey=null;dragMode=null;cleanupOrphanSlots();}
+function cleanupOrphanSlots(){
+  let changed=true;
+  while(changed){
+    changed=false;
+    for(const key of Array.from(selectedSlots)){
+      const[datePart,timePart]=key.split('_'),[h,m]=timePart.split(':').map(Number);
+      let isOrphan=false;
+      if(m===0){
+        const prevHalf=h>0?`${datePart}_${String(h-1).padStart(2,'0')}:30`:null;
+        const nextHalf=`${datePart}_${String(h).padStart(2,'0')}:30`;
+        if((!prevHalf||!selectedSlots.has(prevHalf))&&!selectedSlots.has(nextHalf))isOrphan=true;
+      }else{
+        const sameHour=`${datePart}_${String(h).padStart(2,'0')}:00`;
+        const nextHour=`${datePart}_${String(h+1).padStart(2,'0')}:00`;
+        if(!selectedSlots.has(sameHour)&&!selectedSlots.has(nextHour))isOrphan=true;
       }
-      if (allFilled) cb.checked = true;
+      if(isOrphan){selectedSlots.delete(key);const el=document.querySelector(`[data-key="${key}"]`);if(el)el.classList.remove('selected');changed=true;}
     }
   }
   updateSummary();
 }
-function updateSummary() {
-  const sorted = Array.from(selectedSlots).sort();
-  document.getElementById('sel-count').textContent = '';
-  const list = document.getElementById('sel-list');
-  if (sorted.length===0) { list.innerHTML = '<span style="color:var(--muted);font-size:12px;">カレンダーで日時を選択してください</span>'; return; }
-  const allDayCbs = document.querySelectorAll('.allday-cb:checked');
-  const allDayKeys = new Set(Array.from(allDayCbs).map(cb=>cb.dataset.datekey));
-  const tags = [];
-  allDayCbs.forEach(cb => {
-    const [y,m,d] = cb.dataset.datekey.split('-').map(Number);
-    tags.push(`<span class="slot-tag allday-tag">📅 ${m}/${d}(${DOW_LABELS[new Date(y,m-1,d).getDay()]}) 終日可</span>`);
-  });
-  const byDate = {};
-  sorted.filter(k=>!allDayKeys.has(k.split('_')[0])).forEach(k => {
-    const [dp,tp] = k.split('_'); const [h,m] = tp.split(':').map(Number);
-    if (!byDate[dp]) byDate[dp]=[];
-    byDate[dp].push(h*60+m);
-  });
-  Object.keys(byDate).sort().forEach(dk => {
-    const ml = byDate[dk].sort((a,b)=>a-b); const [y,m,d] = dk.split('-').map(Number);
-    const dow = DOW_LABELS[new Date(y,m-1,d).getDay()];
-    const ranges=[]; let rs=ml[0], re=ml[0]+30;
-    for (let i=1;i<ml.length;i++) { if(ml[i]===re){re+=30;}else{ranges.push({start:rs,end:re});rs=ml[i];re=ml[i]+30;} }
-    ranges.push({start:rs,end:re});
-    ranges.forEach(({start,end}) => {
-      tags.push(`<span class="slot-tag">${m}/${d}(${dow}) ${String(Math.floor(start/60)).padStart(2,'0')}:${String(start%60).padStart(2,'0')}〜${String(Math.floor(end/60)).padStart(2,'0')}:${String(end%60).padStart(2,'0')}</span>`);
-    });
-  });
-  list.innerHTML = tags.join('');
+function toggleSlot(key,add){
+  const el=document.querySelector(`[data-key="${key}"]`);
+  if(!el||el.style.cursor==='not-allowed')return;
+  if(add){selectedSlots.add(key);el.classList.add('selected');}
+  else{
+    selectedSlots.delete(key);el.classList.remove('selected');
+    const dateKey=key.split('_')[0],cb=document.querySelector(`.allday-cb[data-datekey="${dateKey}"]`);
+    if(cb)cb.checked=false;
+  }
+  if(add){
+    const dateKey=key.split('_')[0],cb=document.querySelector(`.allday-cb[data-datekey="${dateKey}"]`);
+    if(cb&&!cb.checked){
+      const[y,m,d]=dateKey.split('-').map(Number),date=new Date(y,m-1,d);let allFilled=true;
+      for(let h=CONFIG.startHour;h<CONFIG.endHour;h++){for(const half of[false,true]){const k=slotKey(date,h,half),slotEl=document.querySelector(`[data-key="${k}"]`);if(slotEl&&slotEl.style.cursor!=='not-allowed'&&!selectedSlots.has(k)){allFilled=false;break;}}if(!allFilled)break;}
+      if(allFilled)cb.checked=true;
+    }
+  }
+  updateSummary();
 }
-async function submitSchedule() {
-  const name = document.getElementById('user-name').value.trim();
-  if (!name) { showToast('お名前を入力してください','error'); return; }
-  if (selectedSlots.size===0) { showToast('日程を1つ以上選択してください','error'); return; }
-  const btn = document.getElementById('submit-btn'); btn.disabled=true; btn.innerHTML='<span class="spinner"></span>送信中...';
-  const allDayCbs = document.querySelectorAll('.allday-cb:checked');
-  const allDayKeys = new Set(Array.from(allDayCbs).map(cb=>cb.dataset.datekey));
-  const allDayDates = Array.from(allDayCbs).map(cb => {
-    const [y,m,d] = cb.dataset.datekey.split('-').map(Number);
-    return `${m}/${d}(${DOW_LABELS[new Date(y,m-1,d).getDay()]}) ${String(CONFIG.startHour).padStart(2,'0')}:00〜${String(CONFIG.endHour).padStart(2,'0')}:00（終日）`;
+function updateSummary(){
+  const sorted=Array.from(selectedSlots).sort();
+  document.getElementById('sel-count').textContent='';
+  const list=document.getElementById('sel-list');
+  if(sorted.length===0){list.innerHTML='<span style="color:var(--muted);font-size:12px;">カレンダーで日時を選択してください</span>';return;}
+  const allDayCbs=document.querySelectorAll('.allday-cb:checked');
+  const allDayKeys=new Set(Array.from(allDayCbs).map(cb=>cb.dataset.datekey));
+  const tags=[];
+  allDayCbs.forEach(cb=>{const[y,m,d]=cb.dataset.datekey.split('-').map(Number);tags.push(`<span class="slot-tag allday-tag">📅 ${m}/${d}(${DOW_LABELS[new Date(y,m-1,d).getDay()]}) 終日可</span>`);});
+  const byDate={};
+  sorted.filter(k=>!allDayKeys.has(k.split('_')[0])).forEach(k=>{const[dp,tp]=k.split('_'),[h,m]=tp.split(':').map(Number);if(!byDate[dp])byDate[dp]=[];byDate[dp].push(h*60+m);});
+  Object.keys(byDate).sort().forEach(dk=>{
+    const ml=byDate[dk].sort((a,b)=>a-b),[y,m,d]=dk.split('-').map(Number),dow=DOW_LABELS[new Date(y,m-1,d).getDay()];
+    const ranges=[];let rs=ml[0],re=ml[0]+30;
+    for(let i=1;i<ml.length;i++){if(ml[i]===re){re+=30;}else{ranges.push({start:rs,end:re});rs=ml[i];re=ml[i]+30;}}
+    ranges.push({start:rs,end:re});
+    ranges.forEach(({start,end})=>tags.push(`<span class="slot-tag">${m}/${d}(${dow}) ${String(Math.floor(start/60)).padStart(2,'0')}:${String(start%60).padStart(2,'0')}〜${String(Math.floor(end/60)).padStart(2,'0')}:${String(end%60).padStart(2,'0')}</span>`));
   });
-  const sorted = Array.from(selectedSlots).sort();
-  const byDate2 = {};
-  sorted.filter(k=>!allDayKeys.has(k.split('_')[0])).forEach(k => {
-    const [dp,tp]=k.split('_'); const [h,m]=tp.split(':').map(Number);
-    if(!byDate2[dp])byDate2[dp]=[]; byDate2[dp].push(h*60+m);
-  });
-  const mergedLines = [];
-  Object.keys(byDate2).sort().forEach(dp => {
-    const ml=byDate2[dp].sort((a,b)=>a-b); const [y2,mo,dy]=dp.split('-').map(Number);
-    const dow=DOW_LABELS[new Date(y2,mo-1,dy).getDay()];
+  list.innerHTML=tags.join('');
+}
+async function submitSchedule(){
+  const name=document.getElementById('user-name').value.trim();
+  if(!name){showToast('お名前を入力してください','error');return;}
+  if(selectedSlots.size===0){showToast('日程を1つ以上選択してください','error');return;}
+  const btn=document.getElementById('submit-btn');btn.disabled=true;btn.innerHTML='<span class="spinner"></span>送信中...';
+  const allDayCbs=document.querySelectorAll('.allday-cb:checked');
+  const allDayKeys=new Set(Array.from(allDayCbs).map(cb=>cb.dataset.datekey));
+  const allDayDates=Array.from(allDayCbs).map(cb=>{const[y,m,d]=cb.dataset.datekey.split('-').map(Number);return `${m}/${d}(${DOW_LABELS[new Date(y,m-1,d).getDay()]}) ${String(CONFIG.startHour).padStart(2,'0')}:00〜${String(CONFIG.endHour).padStart(2,'0')}:00（終日）`;});
+  const sorted=Array.from(selectedSlots).sort();
+  const byDate2={};
+  sorted.filter(k=>!allDayKeys.has(k.split('_')[0])).forEach(k=>{const[dp,tp]=k.split('_'),[h,m]=tp.split(':').map(Number);if(!byDate2[dp])byDate2[dp]=[];byDate2[dp].push(h*60+m);});
+  const mergedLines=[];
+  Object.keys(byDate2).sort().forEach(dp=>{
+    const ml=byDate2[dp].sort((a,b)=>a-b),[y2,mo,dy]=dp.split('-').map(Number),dow=DOW_LABELS[new Date(y2,mo-1,dy).getDay()];
     let rs=ml[0],re=ml[0]+30;
     for(let i=1;i<ml.length;i++){if(ml[i]===re){re+=30;}else{mergedLines.push(`${mo}/${dy}(${dow}) ${String(Math.floor(rs/60)).padStart(2,'0')}:${String(rs%60).padStart(2,'0')}〜${String(Math.floor(re/60)).padStart(2,'0')}:${String(re%60).padStart(2,'0')}`);rs=ml[i];re=ml[i]+30;}}
     mergedLines.push(`${mo}/${dy}(${dow}) ${String(Math.floor(rs/60)).padStart(2,'0')}:${String(rs%60).padStart(2,'0')}〜${String(Math.floor(re/60)).padStart(2,'0')}:${String(re%60).padStart(2,'0')}`);
   });
   let slotsText='';
-  if(allDayDates.length>0) slotsText+='【終日可の日】\n'+allDayDates.join('\n');
+  if(allDayDates.length>0)slotsText+='【終日可の日】\n'+allDayDates.join('\n');
   if(mergedLines.length>0){if(slotsText)slotsText+='\n\n';slotsText+='【時間指定】\n'+mergedLines.join('\n');}
-  try {
-    for (const email of CONFIG.emails) {
-      await emailjs.send(CONFIG.ejsService, CONFIG.ejsTemplate, {to_email:email, event_title:CONFIG.eventTitle, sender_name:name, selected_slots:slotsText, slot_count:sorted.length, reply_to:''});
-    }
+  try{
+    for(const email of CONFIG.emails){await emailjs.send(CONFIG.ejsService,CONFIG.ejsTemplate,{to_email:email,event_title:CONFIG.eventTitle,sender_name:name,selected_slots:slotsText,slot_count:sorted.length,reply_to:''});}
     showToast(`✅ ${name}さんの日程を送信しました！`,'success');
-    selectedSlots.clear(); renderCalendar(); document.getElementById('user-name').value='';
-  } catch(e) { console.error(e); showToast('送信に失敗しました。時間をおいて再度お試しください。','error'); }
-  btn.innerHTML='📨 日程を送信する'; btn.disabled=false;
+    selectedSlots.clear();renderCalendar();document.getElementById('user-name').value='';
+  }catch(e){console.error(e);showToast('送信に失敗しました。時間をおいて再度お試しください。','error');}
+  btn.innerHTML='📨 日程を送信する';btn.disabled=false;
 }
 function showToast(msg,type='success'){const t=document.getElementById('toast');t.textContent=msg;t.className=`${type} show`;setTimeout(()=>{t.className='';},3500);}
 renderCalendar();
