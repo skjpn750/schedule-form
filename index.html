@@ -22,417 +22,131 @@
     --danger: #dc2626;
     --slot-h: 30px;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'Noto Sans JP', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-  }
-
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
   #app { min-height: 100vh; }
-
-  .top-bar {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 16px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 1px 8px rgba(0,0,0,0.06);
-  }
-
-  .top-bar .brand {
-    font-size: 16px;
-    font-weight: 700;
-    background: linear-gradient(135deg, #4f46e5, #6366f1);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .deadline-badge {
-    font-size: 11px;
-    padding: 5px 12px;
-    background: rgba(220,38,38,0.08);
-    border: 1px solid rgba(220,38,38,0.25);
-    border-radius: 20px;
-    color: var(--danger);
-    font-family: 'DM Mono', monospace;
-  }
-
-  .container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 24px 16px;
-  }
-
-  .section-title {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 16px;
-  }
-
+  .top-bar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 8px rgba(0,0,0,0.06); }
+  .top-bar .brand { font-size: 16px; font-weight: 700; background: linear-gradient(135deg, #4f46e5, #6366f1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .deadline-badge { font-size: 11px; padding: 5px 12px; background: rgba(220,38,38,0.08); border: 1px solid rgba(220,38,38,0.25); border-radius: 20px; color: var(--danger); font-family: 'DM Mono', monospace; }
+  .container { max-width: 900px; margin: 0 auto; padding: 24px 16px; }
+  .section-title { font-size: 13px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px; }
   .name-block { margin-bottom: 28px; }
-
-  .name-input {
-    width: 100%;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 12px 16px;
-    color: var(--text);
-    font-family: inherit;
-    font-size: 15px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-
+  .name-input { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; color: var(--text); font-family: inherit; font-size: 15px; outline: none; transition: border-color 0.2s; }
   .name-input:focus { border-color: var(--accent); }
-
   .cal-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-
   .cal-header { display: grid; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 4px; }
   .cal-header .time-col { width: 50px; }
-
   .day-header { text-align: center; padding: 10px 4px; font-size: 12px; }
   .day-header .dow { color: var(--muted); font-size: 11px; }
   .day-header .date { font-weight: 600; font-size: 14px; margin-top: 2px; }
   .day-header.today .date { color: var(--accent2); }
   .day-header.sat .date { color: #60a5fa; }
   .day-header.sun .date { color: var(--danger); }
-
   .cal-body { display: grid; gap: 0; }
   .time-row { display: grid; align-items: start; }
-
-  .time-label {
-    width: 50px;
-    font-size: 11px;
-    color: var(--muted);
-    font-family: 'DM Mono', monospace;
-    padding-right: 8px;
-    text-align: right;
-    height: var(--slot-h);
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-end;
-    padding-top: 4px;
-    border-top: 1px solid #e2e6f0;
-  }
-
-  .time-label.hour-label {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--text);
-    border-top: 2px solid #8892b0;
-  }
-
-  .slot {
-    height: var(--slot-h);
-    border: 1px solid transparent;
-    border-top: 1px solid #e2e6f0;
-    cursor: pointer;
-    transition: background 0.1s;
-    position: relative;
-  }
-
+  .time-label { width: 50px; font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; padding-right: 8px; text-align: right; height: var(--slot-h); display: flex; align-items: flex-start; justify-content: flex-end; padding-top: 4px; border-top: 1px solid #e2e6f0; }
+  .time-label.hour-label { font-size: 12px; font-weight: 700; color: var(--text); border-top: 2px solid #8892b0; }
+  .slot { height: var(--slot-h); border: 1px solid transparent; border-top: 1px solid #e2e6f0; cursor: pointer; transition: background 0.1s; position: relative; }
   .slot.hour-start { border-top: 2px solid #8892b0; }
-
-  .time-row.hour-bg .slot,
-  .time-row.hour-bg .time-label { background-color: #f7f8fc; }
-
+  .time-row.hour-bg .slot, .time-row.hour-bg .time-label { background-color: #f7f8fc; }
   .slot:hover { background: rgba(79,70,229,0.08) !important; }
-
-  .slot.selected {
-    background: var(--selected-bg);
-    border-color: var(--selected);
-  }
-
-  .slot.selected::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(108,99,255,0.2), rgba(167,139,250,0.1));
-  }
-
-  .week-nav {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
-  }
-
-  .week-nav button {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text);
-    padding: 7px 14px;
-    font-size: 13px;
-    cursor: pointer;
-    transition: background 0.15s;
-  }
-
+  .slot.selected { background: var(--selected-bg); border-color: var(--selected); }
+  .slot.selected::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(108,99,255,0.2), rgba(167,139,250,0.1)); }
+  .week-nav { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .week-nav button { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; color: var(--text); padding: 7px 14px; font-size: 13px; cursor: pointer; transition: background 0.15s; }
   .week-nav button:hover { background: var(--surface2); }
   .week-nav button:disabled { opacity: 0.3; cursor: not-allowed; }
-
   .week-label { font-size: 14px; font-weight: 500; flex: 1; text-align: center; }
-
-  .selected-summary {
-    margin-top: 24px;
-    padding: 16px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-  }
-
-  .selected-summary .count {
-    font-size: 13px;
-    color: var(--muted);
-    margin-bottom: 10px;
-  }
-
+  .selected-summary { margin-top: 24px; padding: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; }
+  .selected-summary .count { font-size: 13px; color: var(--muted); margin-bottom: 10px; }
   .selected-summary .count span { color: var(--accent); font-weight: 600; }
-
-  .selected-slots-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    max-height: 120px;
-    overflow-y: auto;
-  }
-
-  .slot-tag {
-    font-size: 11px;
-    padding: 4px 10px;
-    background: var(--selected-bg);
-    border: 1px solid var(--selected);
-    border-radius: 20px;
-    color: var(--accent);
-    font-family: 'DM Mono', monospace;
-  }
-
-  .allday-tag {
-    background: rgba(5, 150, 105, 0.1);
-    border-color: var(--success);
-    color: var(--success);
-    font-family: 'Noto Sans JP', sans-serif;
-    font-weight: 600;
-  }
-
-  .submit-area {
-    margin-top: 28px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    align-items: center;
-  }
-
-  .btn-submit {
-    width: 100%;
-    max-width: 400px;
-    padding: 16px;
-    background: linear-gradient(135deg, #4f46e5, #6366f1);
-    color: #fff;
-    border: none;
-    border-radius: 14px;
-    font-family: inherit;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: opacity 0.2s, transform 0.1s;
-    box-shadow: 0 4px 24px rgba(79, 70, 229, 0.25);
-  }
-
+  .selected-slots-list { display: flex; flex-wrap: wrap; gap: 6px; max-height: 120px; overflow-y: auto; }
+  .slot-tag { font-size: 11px; padding: 4px 10px; background: var(--selected-bg); border: 1px solid var(--selected); border-radius: 20px; color: var(--accent); font-family: 'DM Mono', monospace; }
+  .allday-tag { background: rgba(5, 150, 105, 0.1); border-color: var(--success); color: var(--success); font-family: 'Noto Sans JP', sans-serif; font-weight: 600; }
+  .submit-area { margin-top: 28px; display: flex; flex-direction: column; gap: 12px; align-items: center; }
+  .btn-submit { width: 100%; max-width: 400px; padding: 16px; background: linear-gradient(135deg, #4f46e5, #6366f1); color: #fff; border: none; border-radius: 14px; font-family: inherit; font-size: 16px; font-weight: 700; cursor: pointer; transition: opacity 0.2s, transform 0.1s; box-shadow: 0 4px 24px rgba(79, 70, 229, 0.25); }
   .btn-submit:hover { opacity: 0.9; }
   .btn-submit:active { transform: scale(0.98); }
   .btn-submit:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
-
   .hint { font-size: 12px; color: var(--muted); text-align: center; }
-
-  #toast {
-    position: fixed;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%) translateY(60px);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 14px 24px;
-    font-size: 14px;
-    font-weight: 500;
-    z-index: 9999;
-    transition: transform 0.3s ease;
-    max-width: 90vw;
-    text-align: center;
-  }
-
+  #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(60px); background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 24px; font-size: 14px; font-weight: 500; z-index: 9999; transition: transform 0.3s ease; max-width: 90vw; text-align: center; }
   #toast.show { transform: translateX(-50%) translateY(0); }
   #toast.success { border-color: var(--success); color: var(--success); }
   #toast.error { border-color: var(--danger); color: var(--danger); }
-
-  .spinner {
-    width: 18px; height: 18px;
-    border: 2px solid rgba(255,255,255,0.3);
-    border-top-color: #fff;
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    display: inline-block;
-    vertical-align: middle;
-    margin-right: 8px;
-  }
-
+  .spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; vertical-align: middle; margin-right: 8px; }
   @keyframes spin { to { transform: rotate(360deg); } }
-
   .allday-wrap { margin-top: 6px; }
-
-  .allday-label {
-    display: inline-flex;
-    align-items: center;
-    gap: 3px;
-    font-size: 10px;
-    color: var(--muted);
-    cursor: pointer;
-    padding: 2px 6px;
-    border-radius: 6px;
-    border: 1px solid var(--border);
-    background: var(--surface2);
-    transition: background 0.15s, border-color 0.15s;
-  }
-
+  .allday-label { display: inline-flex; align-items: center; gap: 3px; font-size: 10px; color: var(--muted); cursor: pointer; padding: 2px 6px; border-radius: 6px; border: 1px solid var(--border); background: var(--surface2); transition: background 0.15s, border-color 0.15s; }
   .allday-label:hover { border-color: var(--accent); color: var(--accent); }
-
-  .allday-label input[type="checkbox"] {
-    width: 11px; height: 11px;
-    accent-color: var(--accent);
-    cursor: pointer; margin: 0;
-  }
-
-  .allday-label:has(input:checked) {
-    background: var(--selected-bg);
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-
-  @media (max-width: 600px) {
-    .container { padding: 16px 10px; }
-    :root { --slot-h: 26px; }
-  }
+  .allday-label input[type="checkbox"] { width: 11px; height: 11px; accent-color: var(--accent); cursor: pointer; margin: 0; }
+  .allday-label:has(input:checked) { background: var(--selected-bg); border-color: var(--accent); color: var(--accent); }
+  @media (max-width: 600px) { .container { padding: 16px 10px; } :root { --slot-h: 26px; } }
 </style>
 </head>
 <body>
-
 <div id="app">
   <div class="top-bar">
     <span class="brand">三者コンサル日程調整フォーム</span>
     <span class="deadline-badge" id="deadline-display"></span>
   </div>
-
   <div class="container">
     <div class="name-block">
       <div class="section-title">あなたのお名前</div>
       <input class="name-input" type="text" id="user-name" placeholder="例：山田 太郎" maxlength="30">
     </div>
-
     <div class="section-title">参加可能な日時をドラッグ（タップ）で選択</div>
     <div class="hint" style="margin-bottom:12px;">🖱 ドラッグで連続選択 ／ 📱 タップで1コマ（60分）選択</div>
-
     <div class="week-nav">
       <button id="prev-week" onclick="changeWeek(-1)">← 前の週</button>
       <div class="week-label" id="week-label"></div>
       <button id="next-week" onclick="changeWeek(1)">次の週 →</button>
     </div>
-
-    <div class="cal-wrap">
-      <div id="cal-container"></div>
-    </div>
-
+    <div class="cal-wrap"><div id="cal-container"></div></div>
     <div class="selected-summary">
-      <div class="count">選択済み: <span id="sel-count">0</span></div>
+      <div class="count">選択済み: <span id="sel-count"></span></div>
       <div class="selected-slots-list" id="sel-list">
         <span style="color:var(--muted);font-size:12px;">カレンダーで日時を選択してください</span>
       </div>
     </div>
-
     <div class="submit-area">
-      <button class="btn-submit" id="submit-btn" onclick="submitSchedule()">
-        📨 日程を送信する
-      </button>
+      <button class="btn-submit" id="submit-btn" onclick="submitSchedule()">📨 日程を送信する</button>
       <div class="hint">送信すると担当者にメールで通知されます</div>
     </div>
   </div>
 </div>
-
 <div id="toast"></div>
-
 <script>
-// ===== 設定（固定値） =====
 const CONFIG = {
   eventTitle: '三者コンサル日程調整フォーム',
-  startHour: 13,
-  endHour: 22,
-  dlDaysEnabled: true,
-  dlDays: 5,
-  dlMonthlyEnabled: true,
-  deadlineDay: 25,
-  emails: ['shuji.kuriyama@gmail.com', 'info@shuji-kuriyama.com'],
+  startHour: 13, endHour: 22,
+  dlDaysEnabled: true, dlDays: 5,
+  dlMonthlyEnabled: true, deadlineDay: 25,
+  emails: ['shuji.kuriyama@gmail.com', 'kawa0703nao@gmail.com'],
   ejsService: 'service_j9tp91s',
   ejsTemplate: 'template_pldd678',
   ejsPubkey: 'NNu1ungyB5xPN5DIb'
 };
-
-// EmailJS 初期化
 emailjs.init(CONFIG.ejsPubkey);
-
-// 締め切りバッジ
 const parts = [];
 if (CONFIG.dlDaysEnabled) parts.push(`実施${CONFIG.dlDays}日前`);
 if (CONFIG.dlMonthlyEnabled) parts.push(`毎月${CONFIG.deadlineDay}日`);
-document.getElementById('deadline-display').textContent =
-  parts.length > 0 ? `締め切り: ${parts.join(' / ')}` : '締め切り: なし';
-
-let selectedSlots = new Set();
-let isDragging = false;
-let dragMode = null;
-let dragStartKey = null;
-let currentWeekOffset = 0;
-const TODAY = new Date();
-TODAY.setHours(0,0,0,0);
-
-// ===== DATE HELPERS =====
+document.getElementById('deadline-display').textContent = parts.length > 0 ? `締め切り: ${parts.join(' / ')}` : '締め切り: なし';
+let selectedSlots = new Set(), isDragging = false, dragMode = null, dragStartKey = null, currentWeekOffset = 0;
+const TODAY = new Date(); TODAY.setHours(0,0,0,0);
+const DOW_LABELS = ['日','月','火','水','木','金','土'];
 function getWeekDates(offset) {
-  const d = new Date(TODAY);
-  const day = d.getDay();
-  const diff = day === 0 ? -6 : 1 - day;
-  d.setDate(d.getDate() + diff + offset * 7);
-  const dates = [];
-  for (let i = 0; i < 7; i++) {
-    const dd = new Date(d);
-    dd.setDate(d.getDate() + i);
-    dates.push(dd);
-  }
-  return dates;
+  const d = new Date(TODAY); const day = d.getDay();
+  d.setDate(d.getDate() + (day === 0 ? -6 : 1 - day) + offset * 7);
+  return Array.from({length:7}, (_,i) => { const dd = new Date(d); dd.setDate(d.getDate()+i); return dd; });
 }
-
 function slotKey(date, hour, half) {
-  return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}_${String(hour).padStart(2,'0')}:${half ? '30' : '00'}`;
+  return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}_${String(hour).padStart(2,'0')}:${half?'30':'00'}`;
 }
-
-function isSlotAvailable(date, hour, half) {
+function isSlotAvailable(date) {
   const now = new Date();
   if (CONFIG.dlDaysEnabled) {
-    const slotDate = new Date(date);
-    slotDate.setHours(0,0,0,0);
-    const cutoff = new Date(slotDate);
-    cutoff.setDate(cutoff.getDate() - CONFIG.dlDays);
-    cutoff.setHours(23,59,59,999);
+    const cutoff = new Date(date); cutoff.setHours(0,0,0,0);
+    cutoff.setDate(cutoff.getDate() - CONFIG.dlDays); cutoff.setHours(23,59,59,999);
     if (now > cutoff) return false;
   }
   if (CONFIG.dlMonthlyEnabled) {
@@ -441,206 +155,106 @@ function isSlotAvailable(date, hour, half) {
   }
   return true;
 }
-
 function isPastDate(date) { return date < TODAY; }
-
-const DOW_LABELS = ['日','月','火','水','木','金','土'];
-
-// ===== 最初の予約可能週を探す =====
 (function initWeek() {
-  const maxDate = new Date(TODAY);
-  maxDate.setMonth(maxDate.getMonth() + 1);
-  outerLoop: for (let w = 0; w <= 4; w++) {
+  const maxDate = new Date(TODAY); maxDate.setMonth(maxDate.getMonth()+1);
+  outerLoop: for (let w=0; w<=4; w++) {
     for (const wd of getWeekDates(w)) {
       if (wd < TODAY || wd >= maxDate) continue;
-      if (isSlotAvailable(wd, CONFIG.startHour, false)) {
-        currentWeekOffset = w;
-        break outerLoop;
-      }
+      if (isSlotAvailable(wd)) { currentWeekOffset = w; break outerLoop; }
     }
   }
 })();
-
-// ===== ALL DAY TOGGLE =====
 function toggleAllDay(cb) {
-  const dateKey = cb.dataset.datekey;
-  const checked = cb.checked;
-  const [y, m, d] = dateKey.split('-').map(Number);
-  const date = new Date(y, m-1, d);
-  for (let h = CONFIG.startHour; h < CONFIG.endHour; h++) {
-    for (const half of [false, true]) {
-      const key = slotKey(date, h, half);
-      const el = document.querySelector(`[data-key="${key}"]`);
-      if (!el || el.style.cursor === 'not-allowed') continue;
+  const dateKey = cb.dataset.datekey; const checked = cb.checked;
+  const [y,m,d] = dateKey.split('-').map(Number); const date = new Date(y,m-1,d);
+  for (let h=CONFIG.startHour; h<CONFIG.endHour; h++) {
+    for (const half of [false,true]) {
+      const key = slotKey(date,h,half); const el = document.querySelector(`[data-key="${key}"]`);
+      if (!el || el.style.cursor==='not-allowed') continue;
       if (checked) { selectedSlots.add(key); el.classList.add('selected'); }
       else { selectedSlots.delete(key); el.classList.remove('selected'); }
     }
   }
   updateSummary();
 }
-
-// ===== RENDER CALENDAR =====
 function renderCalendar() {
   const dates = getWeekDates(currentWeekOffset);
-  const maxDate = new Date(TODAY);
-  maxDate.setMonth(maxDate.getMonth() + 1);
-
-  const first = dates[0], last = dates[6];
-  document.getElementById('week-label').textContent =
-    `${first.getMonth()+1}/${first.getDate()} 〜 ${last.getMonth()+1}/${last.getDate()}`;
-
+  const maxDate = new Date(TODAY); maxDate.setMonth(maxDate.getMonth()+1);
+  document.getElementById('week-label').textContent = `${dates[0].getMonth()+1}/${dates[0].getDate()} 〜 ${dates[6].getMonth()+1}/${dates[6].getDate()}`;
   document.getElementById('prev-week').disabled = currentWeekOffset <= 0;
   document.getElementById('next-week').disabled = dates[0] >= maxDate;
-
-  const container = document.getElementById('cal-container');
-  container.innerHTML = '';
-
-  const hours = [];
-  for (let h = CONFIG.startHour; h < CONFIG.endHour; h++) {
-    hours.push({h, half: false});
-    hours.push({h, half: true});
-  }
-
+  const container = document.getElementById('cal-container'); container.innerHTML = '';
+  const hours = []; for (let h=CONFIG.startHour; h<CONFIG.endHour; h++) { hours.push({h,half:false}); hours.push({h,half:true}); }
   const gridStyle = 'grid-template-columns: 50px repeat(7, 1fr);';
-
-  // Header
-  const header = document.createElement('div');
-  header.className = 'cal-header';
-  header.style.cssText = `display:grid; ${gridStyle}`;
+  const header = document.createElement('div'); header.className = 'cal-header'; header.style.cssText = `display:grid; ${gridStyle}`;
   header.innerHTML = '<div class="time-col"></div>';
   dates.forEach(d => {
-    const isToday = d.getTime() === TODAY.getTime();
-    const dow = d.getDay();
-    const cls = `day-header ${isToday ? 'today' : ''} ${dow === 6 ? 'sat' : ''} ${dow === 0 ? 'sun' : ''}`;
+    const dow = d.getDay(); const isToday = d.getTime()===TODAY.getTime();
+    const cls = `day-header ${isToday?'today':''} ${dow===6?'sat':''} ${dow===0?'sun':''}`;
     const dateKey = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     const past = isPastDate(d);
-    header.innerHTML += `<div class="${cls}">
-      <div class="dow">${DOW_LABELS[dow]}</div>
-      <div class="date">${d.getDate()}</div>
-      <div class="allday-wrap">
-        <label class="allday-label" title="終日選択">
-          <input type="checkbox" class="allday-cb" data-datekey="${dateKey}" ${past ? 'disabled' : ''} onchange="toggleAllDay(this)">
-          <span>終日可</span>
-        </label>
-      </div>
-    </div>`;
+    header.innerHTML += `<div class="${cls}"><div class="dow">${DOW_LABELS[dow]}</div><div class="date">${d.getDate()}</div><div class="allday-wrap"><label class="allday-label"><input type="checkbox" class="allday-cb" data-datekey="${dateKey}" ${past?'disabled':''} onchange="toggleAllDay(this)"><span>終日可</span></label></div></div>`;
   });
   container.appendChild(header);
-
-  // Body
-  const body = document.createElement('div');
-  body.className = 'cal-body';
-
-  hours.forEach(({h, half}) => {
-    const isEven = Math.floor((h - CONFIG.startHour)) % 2 === 0;
-    const row = document.createElement('div');
-    row.className = `time-row${isEven ? ' hour-bg' : ''}`;
-    row.style.cssText = `display:grid; ${gridStyle}`;
-
-    const label = !half ? `${String(h).padStart(2,'00')}:00` : '';
-    const labelClass = !half ? 'time-label hour-label' : 'time-label';
-    row.innerHTML = `<div class="${labelClass}">${label}</div>`;
-
+  const body = document.createElement('div'); body.className = 'cal-body';
+  hours.forEach(({h,half}) => {
+    const isEven = Math.floor((h-CONFIG.startHour))%2===0;
+    const row = document.createElement('div'); row.className = `time-row${isEven?' hour-bg':''}`; row.style.cssText = `display:grid; ${gridStyle}`;
+    row.innerHTML = `<div class="${!half?'time-label hour-label':'time-label'}">${!half?String(h).padStart(2,'0')+':00':''}</div>`;
     dates.forEach(d => {
-      const key = slotKey(d, h, half);
-      const past = isPastDate(d) || !isSlotAvailable(d, h, half);
-      const sel = selectedSlots.has(key);
+      const key = slotKey(d,h,half); const past = isPastDate(d)||!isSlotAvailable(d);
       const cell = document.createElement('div');
-      cell.className = `${!half ? 'slot hour-start' : 'slot'} ${sel ? 'selected' : ''} ${past ? 'past' : ''}`;
+      cell.className = `${!half?'slot hour-start':'slot'} ${selectedSlots.has(key)?'selected':''} ${past?'past':''}`;
       cell.dataset.key = key;
-      if (past) {
-        cell.style.cssText = 'opacity:0.2; cursor:not-allowed;';
-      } else {
+      if (past) { cell.style.cssText = 'opacity:0.2; cursor:not-allowed;'; }
+      else {
         cell.addEventListener('mousedown', e => { e.preventDefault(); startDrag(key); });
         cell.addEventListener('mouseenter', () => { if (isDragging) continueDrag(key); });
         cell.addEventListener('mouseup', () => endDrag());
         cell.addEventListener('touchstart', e => { e.preventDefault(); startDrag(key); }, {passive:false});
-        cell.addEventListener('touchmove', e => {
-          e.preventDefault();
-          const t = e.touches[0];
-          const el = document.elementFromPoint(t.clientX, t.clientY);
-          if (el && el.dataset.key) continueDrag(el.dataset.key);
-        }, {passive:false});
+        cell.addEventListener('touchmove', e => { e.preventDefault(); const t=e.touches[0]; const el=document.elementFromPoint(t.clientX,t.clientY); if (el&&el.dataset.key) continueDrag(el.dataset.key); }, {passive:false});
         cell.addEventListener('touchend', () => endDrag());
       }
       row.appendChild(cell);
     });
     body.appendChild(row);
   });
-
   document.addEventListener('mouseup', endDrag);
-  container.appendChild(body);
-  updateSummary();
+  container.appendChild(body); updateSummary();
 }
-
 function changeWeek(dir) {
-  const maxDate = new Date(TODAY);
-  maxDate.setMonth(maxDate.getMonth() + 1);
-  const newOffset = currentWeekOffset + dir;
-  const dates = getWeekDates(newOffset);
-  if (dir < 0 && newOffset < 0) return;
-  if (dir > 0 && dates[0] >= maxDate) return;
-  currentWeekOffset = newOffset;
-  renderCalendar();
+  const maxDate = new Date(TODAY); maxDate.setMonth(maxDate.getMonth()+1);
+  const newOffset = currentWeekOffset+dir; const dates = getWeekDates(newOffset);
+  if (dir<0 && newOffset<0) return; if (dir>0 && dates[0]>=maxDate) return;
+  currentWeekOffset = newOffset; renderCalendar();
 }
-
-// ===== DRAG LOGIC =====
 function startDrag(key) {
-  isDragging = true;
-  dragMode = selectedSlots.has(key) ? 'remove' : 'add';
-  dragStartKey = key;
-
-  const [datePart, timePart] = key.split('_');
-  const [h, m] = timePart.split(':').map(Number);
-  let pairKey;
-  if (m === 0) {
-    pairKey = `${datePart}_${String(h).padStart(2,'0')}:30`;
-  } else {
-    pairKey = `${datePart}_${String(h + 1).padStart(2,'0')}:00`;
-  }
-  toggleSlot(key, dragMode === 'add');
-  toggleSlot(pairKey, dragMode === 'add');
+  isDragging = true; dragMode = selectedSlots.has(key)?'remove':'add'; dragStartKey = key;
+  const [datePart,timePart] = key.split('_'); const [h,m] = timePart.split(':').map(Number);
+  const pairKey = m===0 ? `${datePart}_${String(h).padStart(2,'0')}:30` : `${datePart}_${String(h+1).padStart(2,'0')}:00`;
+  toggleSlot(key, dragMode==='add'); toggleSlot(pairKey, dragMode==='add');
 }
-
-function continueDrag(key) {
-  if (!isDragging) return;
-  toggleSlot(key, dragMode === 'add');
-}
-
-function endDrag() {
-  isDragging = false;
-  dragStartKey = null;
-  dragMode = null;
-}
-
+function continueDrag(key) { if (!isDragging) return; toggleSlot(key, dragMode==='add'); }
+function endDrag() { isDragging=false; dragStartKey=null; dragMode=null; }
 function toggleSlot(key, add) {
   const el = document.querySelector(`[data-key="${key}"]`);
-  if (!el || el.style.cursor === 'not-allowed') return;
-  if (add) {
-    selectedSlots.add(key);
-    el.classList.add('selected');
-  } else {
-    selectedSlots.delete(key);
-    el.classList.remove('selected');
-    const dateKey = key.split('_')[0];
-    const cb = document.querySelector(`.allday-cb[data-datekey="${dateKey}"]`);
+  if (!el || el.style.cursor==='not-allowed') return;
+  if (add) { selectedSlots.add(key); el.classList.add('selected'); }
+  else {
+    selectedSlots.delete(key); el.classList.remove('selected');
+    const dateKey = key.split('_')[0]; const cb = document.querySelector(`.allday-cb[data-datekey="${dateKey}"]`);
     if (cb) cb.checked = false;
   }
-
   if (add) {
-    const dateKey = key.split('_')[0];
-    const cb = document.querySelector(`.allday-cb[data-datekey="${dateKey}"]`);
+    const dateKey = key.split('_')[0]; const cb = document.querySelector(`.allday-cb[data-datekey="${dateKey}"]`);
     if (cb && !cb.checked) {
-      const [y, m, d] = dateKey.split('-').map(Number);
-      const date = new Date(y, m-1, d);
+      const [y,m,d] = dateKey.split('-').map(Number); const date = new Date(y,m-1,d);
       let allFilled = true;
-      for (let h = CONFIG.startHour; h < CONFIG.endHour; h++) {
-        for (const half of [false, true]) {
-          const k = slotKey(date, h, half);
-          const slotEl = document.querySelector(`[data-key="${k}"]`);
-          if (slotEl && slotEl.style.cursor !== 'not-allowed' && !selectedSlots.has(k)) {
-            allFilled = false; break;
-          }
+      for (let h=CONFIG.startHour; h<CONFIG.endHour; h++) {
+        for (const half of [false,true]) {
+          const k = slotKey(date,h,half); const slotEl = document.querySelector(`[data-key="${k}"]`);
+          if (slotEl && slotEl.style.cursor!=='not-allowed' && !selectedSlots.has(k)) { allFilled=false; break; }
         }
         if (!allFilled) break;
       }
@@ -649,145 +263,74 @@ function toggleSlot(key, add) {
   }
   updateSummary();
 }
-
 function updateSummary() {
   const sorted = Array.from(selectedSlots).sort();
-  document.getElementById('sel-count').textContent = sorted.length;
+  document.getElementById('sel-count').textContent = '';
   const list = document.getElementById('sel-list');
-  if (sorted.length === 0) {
-    list.innerHTML = '<span style="color:var(--muted);font-size:12px;">カレンダーで日時を選択してください</span>';
-    return;
-  }
-
+  if (sorted.length===0) { list.innerHTML = '<span style="color:var(--muted);font-size:12px;">カレンダーで日時を選択してください</span>'; return; }
   const allDayCbs = document.querySelectorAll('.allday-cb:checked');
-  const allDayKeys = new Set(Array.from(allDayCbs).map(cb => cb.dataset.datekey));
+  const allDayKeys = new Set(Array.from(allDayCbs).map(cb=>cb.dataset.datekey));
   const tags = [];
-
   allDayCbs.forEach(cb => {
-    const [y, m, d] = cb.dataset.datekey.split('-').map(Number);
-    const dow = DOW_LABELS[new Date(y, m-1, d).getDay()];
-    tags.push(`<span class="slot-tag allday-tag">📅 ${m}/${d}(${dow}) 終日可</span>`);
+    const [y,m,d] = cb.dataset.datekey.split('-').map(Number);
+    tags.push(`<span class="slot-tag allday-tag">📅 ${m}/${d}(${DOW_LABELS[new Date(y,m-1,d).getDay()]}) 終日可</span>`);
   });
-
-  const individualSlots = sorted.filter(k => !allDayKeys.has(k.split('_')[0]));
   const byDate = {};
-  individualSlots.forEach(k => {
-    const [dp, tp] = k.split('_');
-    const [h, m] = tp.split(':').map(Number);
-    if (!byDate[dp]) byDate[dp] = [];
-    byDate[dp].push(h * 60 + m);
+  sorted.filter(k=>!allDayKeys.has(k.split('_')[0])).forEach(k => {
+    const [dp,tp] = k.split('_'); const [h,m] = tp.split(':').map(Number);
+    if (!byDate[dp]) byDate[dp]=[];
+    byDate[dp].push(h*60+m);
   });
-
-  Object.keys(byDate).sort().forEach(dateKey => {
-    const minsList = byDate[dateKey].sort((a, b) => a - b);
-    const [y, m, d] = dateKey.split('-').map(Number);
-    const dow = DOW_LABELS[new Date(y, m-1, d).getDay()];
-    const ranges = [];
-    let rs = minsList[0], re = minsList[0] + 30;
-    for (let i = 1; i < minsList.length; i++) {
-      if (minsList[i] === re) { re += 30; }
-      else { ranges.push({start:rs, end:re}); rs = minsList[i]; re = minsList[i] + 30; }
-    }
-    ranges.push({start:rs, end:re});
-    ranges.forEach(({start, end}) => {
-      const sh = String(Math.floor(start/60)).padStart(2,'0');
-      const sm = String(start%60).padStart(2,'0');
-      const eh = String(Math.floor(end/60)).padStart(2,'0');
-      const em = String(end%60).padStart(2,'0');
-      tags.push(`<span class="slot-tag">${m}/${d}(${dow}) ${sh}:${sm}〜${eh}:${em}</span>`);
+  Object.keys(byDate).sort().forEach(dk => {
+    const ml = byDate[dk].sort((a,b)=>a-b); const [y,m,d] = dk.split('-').map(Number);
+    const dow = DOW_LABELS[new Date(y,m-1,d).getDay()];
+    const ranges=[]; let rs=ml[0], re=ml[0]+30;
+    for (let i=1;i<ml.length;i++) { if(ml[i]===re){re+=30;}else{ranges.push({start:rs,end:re});rs=ml[i];re=ml[i]+30;} }
+    ranges.push({start:rs,end:re});
+    ranges.forEach(({start,end}) => {
+      tags.push(`<span class="slot-tag">${m}/${d}(${dow}) ${String(Math.floor(start/60)).padStart(2,'0')}:${String(start%60).padStart(2,'0')}〜${String(Math.floor(end/60)).padStart(2,'0')}:${String(end%60).padStart(2,'0')}</span>`);
     });
   });
-
   list.innerHTML = tags.join('');
 }
-
-// ===== SUBMIT =====
 async function submitSchedule() {
   const name = document.getElementById('user-name').value.trim();
-  if (!name) { showToast('お名前を入力してください', 'error'); return; }
-  if (selectedSlots.size === 0) { showToast('日程を1つ以上選択してください', 'error'); return; }
-
-  const btn = document.getElementById('submit-btn');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span>送信中...';
-
+  if (!name) { showToast('お名前を入力してください','error'); return; }
+  if (selectedSlots.size===0) { showToast('日程を1つ以上選択してください','error'); return; }
+  const btn = document.getElementById('submit-btn'); btn.disabled=true; btn.innerHTML='<span class="spinner"></span>送信中...';
   const allDayCbs = document.querySelectorAll('.allday-cb:checked');
+  const allDayKeys = new Set(Array.from(allDayCbs).map(cb=>cb.dataset.datekey));
   const allDayDates = Array.from(allDayCbs).map(cb => {
-    const [y, m, d] = cb.dataset.datekey.split('-').map(Number);
-    const dow = DOW_LABELS[new Date(y, m-1, d).getDay()];
-    const sh = String(CONFIG.startHour).padStart(2,'0');
-    const eh = String(CONFIG.endHour).padStart(2,'0');
-    return `${m}/${d}(${dow}) ${sh}:00〜${eh}:00（終日）`;
+    const [y,m,d] = cb.dataset.datekey.split('-').map(Number);
+    return `${m}/${d}(${DOW_LABELS[new Date(y,m-1,d).getDay()]}) ${String(CONFIG.startHour).padStart(2,'0')}:00〜${String(CONFIG.endHour).padStart(2,'0')}:00（終日）`;
   });
-
   const sorted = Array.from(selectedSlots).sort();
-  const allDayKeys = new Set(Array.from(allDayCbs).map(cb => cb.dataset.datekey));
-  const individualSlots = sorted.filter(k => !allDayKeys.has(k.split('_')[0]));
-
   const byDate2 = {};
-  individualSlots.forEach(k => {
-    const [dp, tp] = k.split('_');
-    const [h, m] = tp.split(':').map(Number);
-    if (!byDate2[dp]) byDate2[dp] = [];
-    byDate2[dp].push(h * 60 + m);
+  sorted.filter(k=>!allDayKeys.has(k.split('_')[0])).forEach(k => {
+    const [dp,tp]=k.split('_'); const [h,m]=tp.split(':').map(Number);
+    if(!byDate2[dp])byDate2[dp]=[]; byDate2[dp].push(h*60+m);
   });
-
   const mergedLines = [];
   Object.keys(byDate2).sort().forEach(dp => {
-    const minsList = byDate2[dp].sort((a, b) => a - b);
-    const [y2, mo, dy] = dp.split('-').map(Number);
-    const dow = DOW_LABELS[new Date(y2, mo-1, dy).getDay()];
-    let rs = minsList[0], re = minsList[0] + 30;
-    for (let i = 1; i < minsList.length; i++) {
-      if (minsList[i] === re) { re += 30; }
-      else {
-        mergedLines.push(`${mo}/${dy}(${dow}) ${String(Math.floor(rs/60)).padStart(2,'0')}:${String(rs%60).padStart(2,'0')}〜${String(Math.floor(re/60)).padStart(2,'0')}:${String(re%60).padStart(2,'0')}`);
-        rs = minsList[i]; re = minsList[i] + 30;
-      }
-    }
+    const ml=byDate2[dp].sort((a,b)=>a-b); const [y2,mo,dy]=dp.split('-').map(Number);
+    const dow=DOW_LABELS[new Date(y2,mo-1,dy).getDay()];
+    let rs=ml[0],re=ml[0]+30;
+    for(let i=1;i<ml.length;i++){if(ml[i]===re){re+=30;}else{mergedLines.push(`${mo}/${dy}(${dow}) ${String(Math.floor(rs/60)).padStart(2,'0')}:${String(rs%60).padStart(2,'0')}〜${String(Math.floor(re/60)).padStart(2,'0')}:${String(re%60).padStart(2,'0')}`);rs=ml[i];re=ml[i]+30;}}
     mergedLines.push(`${mo}/${dy}(${dow}) ${String(Math.floor(rs/60)).padStart(2,'0')}:${String(rs%60).padStart(2,'0')}〜${String(Math.floor(re/60)).padStart(2,'0')}:${String(re%60).padStart(2,'0')}`);
   });
-
-  let slotsText = '';
-  if (allDayDates.length > 0) slotsText += '【終日可の日】\n' + allDayDates.join('\n');
-  if (mergedLines.length > 0) {
-    if (slotsText) slotsText += '\n\n';
-    slotsText += '【時間指定】\n' + mergedLines.join('\n');
-  }
-
+  let slotsText='';
+  if(allDayDates.length>0) slotsText+='【終日可の日】\n'+allDayDates.join('\n');
+  if(mergedLines.length>0){if(slotsText)slotsText+='\n\n';slotsText+='【時間指定】\n'+mergedLines.join('\n');}
   try {
     for (const email of CONFIG.emails) {
-      await emailjs.send(CONFIG.ejsService, CONFIG.ejsTemplate, {
-        to_email: email,
-        event_title: CONFIG.eventTitle,
-        sender_name: name,
-        selected_slots: slotsText,
-        slot_count: sorted.length,
-        reply_to: ''
-      });
+      await emailjs.send(CONFIG.ejsService, CONFIG.ejsTemplate, {to_email:email, event_title:CONFIG.eventTitle, sender_name:name, selected_slots:slotsText, slot_count:sorted.length, reply_to:''});
     }
-    showToast(`✅ ${name}さんの日程を送信しました！`, 'success');
-    selectedSlots.clear();
-    renderCalendar();
-    document.getElementById('user-name').value = '';
-  } catch(e) {
-    console.error(e);
-    showToast('送信に失敗しました。時間をおいて再度お試しください。', 'error');
-  }
-
-  btn.innerHTML = '📨 日程を送信する';
-  btn.disabled = false;
+    showToast(`✅ ${name}さんの日程を送信しました！`,'success');
+    selectedSlots.clear(); renderCalendar(); document.getElementById('user-name').value='';
+  } catch(e) { console.error(e); showToast('送信に失敗しました。時間をおいて再度お試しください。','error'); }
+  btn.innerHTML='📨 日程を送信する'; btn.disabled=false;
 }
-
-// ===== TOAST =====
-function showToast(msg, type = 'success') {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = `${type} show`;
-  setTimeout(() => { t.className = ''; }, 3500);
-}
-
-// 起動
+function showToast(msg,type='success'){const t=document.getElementById('toast');t.textContent=msg;t.className=`${type} show`;setTimeout(()=>{t.className='';},3500);}
 renderCalendar();
 </script>
 </body>
