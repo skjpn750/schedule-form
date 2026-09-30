@@ -136,13 +136,13 @@ function slotKey(date,hour,half) {
 function isSlotAvailable(date,hour,half) {
   const now=new Date();
   if (CONFIG.dlDaysEnabled) { const c=new Date(date); c.setHours(0,0,0,0); c.setDate(c.getDate()-CONFIG.dlDays); c.setHours(23,59,59,999); if(now>c)return false; }
-  if (CONFIG.dlMonthlyEnabled) { const c=new Date(now.getFullYear(),now.getMonth(),CONFIG.deadlineDay,23,59,59); if(now>c)return false; }
+  if (CONFIG.dlMonthlyEnabled) { const c=new Date(date.getFullYear(),date.getMonth(),CONFIG.deadlineDay,23,59,59); if(now>c)return false; }
   return true;
 }
 function isPastDate(date){return date<TODAY;}
 (function initWeek(){
-  const maxDate=new Date(TODAY); maxDate.setMonth(maxDate.getMonth()+1);
-  outerLoop: for(let w=0;w<=4;w++){for(const wd of getWeekDates(w)){if(wd<TODAY||wd>=maxDate)continue;if(isSlotAvailable(wd,CONFIG.startHour,false)){currentWeekOffset=w;break outerLoop;}}}
+  const maxDate=new Date(TODAY.getFullYear(),TODAY.getMonth()+2,1);
+  outerLoop: for(let w=0;w<=9;w++){for(const wd of getWeekDates(w)){if(wd<TODAY||wd>=maxDate)continue;if(isSlotAvailable(wd,CONFIG.startHour,false)){currentWeekOffset=w;break outerLoop;}}}
 })();
 function toggleAllDay(cb){
   const dateKey=cb.dataset.datekey,checked=cb.checked,[y,m,d]=dateKey.split('-').map(Number),date=new Date(y,m-1,d);
@@ -150,7 +150,7 @@ function toggleAllDay(cb){
   updateSummary();
 }
 function renderCalendar(){
-  const dates=getWeekDates(currentWeekOffset),maxDate=new Date(TODAY);maxDate.setMonth(maxDate.getMonth()+1);
+  const dates=getWeekDates(currentWeekOffset),maxDate=new Date(TODAY.getFullYear(),TODAY.getMonth()+2,1);
   document.getElementById('week-label').textContent=`${dates[0].getMonth()+1}/${dates[0].getDate()} 〜 ${dates[6].getMonth()+1}/${dates[6].getDate()}`;
   document.getElementById('prev-week').disabled=currentWeekOffset<=0;
   document.getElementById('next-week').disabled=dates[0]>=maxDate;
@@ -192,7 +192,7 @@ function renderCalendar(){
   container.appendChild(body);updateSummary();
 }
 function changeWeek(dir){
-  const maxDate=new Date(TODAY);maxDate.setMonth(maxDate.getMonth()+1);
+  const maxDate=new Date(TODAY.getFullYear(),TODAY.getMonth()+2,1);
   const newOffset=currentWeekOffset+dir,dates=getWeekDates(newOffset);
   if(dir<0&&newOffset<0)return;if(dir>0&&dates[0]>=maxDate)return;
   currentWeekOffset=newOffset;renderCalendar();
